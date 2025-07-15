@@ -386,3 +386,6 @@ def setup_budget_alerts(email_config: Dict = None) -> Dict:
         return alert_system.update_alert_config({'email_settings': email_config})
     
     return {'success': True, 'message': 'Budget alert system initialized'}
+
+# alias for legacy import in main.py
+BudgetChecker = BudgetAlertSystem
