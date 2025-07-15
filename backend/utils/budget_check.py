@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 import json
 import os
 from backend.database import get_db_connection
-from backend.crud import get_job_expenses, get_job_budgets
+from backend.crud import get_job_by_code, get_expenses_by_job, get_budgets_by_job
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -90,10 +90,16 @@ class BudgetAlertSystem:
             
             # Get database connection
             db = next(get_db_connection())
+
+            # Resolve job code → internal ID
+            job = get_job_by_code(db, job_code)
+            if not job:
+                return {'success': False, 'error': f'Job {job_code} not found'}
+            job_id = job.id
             
             # Get job expenses and budgets
-            expenses = get_job_expenses(db, job_code)
-            budgets = get_job_budgets(db, job_code)
+            expenses = get_expenses_by_job(db, job_id)
+            budgets = get_budgets_by_job(db, job_id)
             
             if not budgets:
                 logger.warning(f"⚠️  No budgets found for job {job_code}")
