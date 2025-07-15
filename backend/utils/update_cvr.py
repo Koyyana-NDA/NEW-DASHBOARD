@@ -622,4 +622,10 @@ class CVRUpdater:
             raise FileNotFoundError("No processed CVR found")
         return files[-1]
 
+# expose methods for direct import
+def process_all_jobs_cvr(db, template_path=None):
+    return CVRUpdater().process_all_jobs_cvr(db, template_path)
+
+def download_latest_cvr():
+    return CVRUpdater().download_latest_cvr()
 
