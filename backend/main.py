@@ -33,9 +33,6 @@ origins = [
     # "http://localhost:5173",  # if you ever run your frontend locally
 ]
 
-
-app.include_router(auth_router, tags=["Authentication"])
-
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -44,6 +41,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.include_router(auth_router, tags=["Authentication"])
+
 
 # Security scheme
 # security = HTTPBearer()
