@@ -17,7 +17,7 @@ import os
 # Import your existing modules
 from .database import get_db
 from .auth import get_current_user, oauth2_scheme
-from .auth import router as auth_router
+
 from .models import *
 from . import crud
 
@@ -42,6 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from .auth import router as auth_router
 
 app.include_router(auth_router, tags=["Authentication"])
 
