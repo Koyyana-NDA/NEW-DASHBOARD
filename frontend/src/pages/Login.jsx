@@ -18,7 +18,8 @@ export default function Login() {
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
-    const response = await fetch("${API_URL}/token", {
+    // ⚠️ Use backticks here so API_URL is interpolated:
+    const response = await fetch(`${API_URL}/token`, {
       method: "POST",
       headers: {"Content-Type": "application/x-www-form-urlencoded"},
       body: formData
