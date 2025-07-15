@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { default as jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
+// Read the backend URL you set in Render’s env
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -15,7 +18,7 @@ export default function Login() {
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
-    const response = await fetch("http://127.0.0.1:8000/token", {
+    const response = await fetch("${API_URL}/token", {
       method: "POST",
       headers: {"Content-Type": "application/x-www-form-urlencoded"},
       body: formData
