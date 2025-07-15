@@ -27,12 +27,19 @@ logger = logging.getLogger(__name__)
 
 # Create FastAPI app (if not already created in your main.py)
 app = FastAPI(title="NDA Dashboard API", version="1.0.0")
+
+origins = [
+    "https://new-dashboard-u2l9.onrender.com",
+    # "http://localhost:5173",  # if you ever run your frontend locally
+]
+
+
 app.include_router(auth_router, tags=["Authentication"])
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Your frontend URL
+    allow_origins=origins,  # Your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
