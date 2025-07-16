@@ -5,37 +5,49 @@ import { default as jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 // Read the backend URL you set in Render’s env
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "https://new-dashboard-backend.onrender.com";
 
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async () => {
-    const formData = new URLSearchParams();
-    formData.append("username", username);
-    formData.append("password", password);
-    // ⚠️ Use backticks here so API_URL is interpolated:
-    const response = await fetch(`${API_URL}/token`, {
-      method: "POST",
-      headers: {"Content-Type": "application/x-www-form-urlencoded"},
-      body: formData
-    });
+    setLoading(true)
+    setError('')
     
+    try {
+      const formData = new URLSearchParams();
+      formData.append("username", username);
+      formData.append("password", password);
+      
+      const response = await fetch(`${API_URL}/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData
+      });
 
-    if (response.ok) {
+      if (response.ok) {
         const { access_token, role } = await response.json();
         localStorage.setItem('token', access_token);
         localStorage.setItem('role', role);
         navigate('/dashboard');
-    } else {
-        setError('Invalid credentials');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.detail || 'Invalid credentials');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false)
     }
-
-    };
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -58,9 +70,10 @@ export default function Login() {
         />
         <button
           onClick={handleLogin}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
         >
-          Login
+          {loading ? 'Logging in...' : 'Login'}
         </button>
       </div>
     </div>
