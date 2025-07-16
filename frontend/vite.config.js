@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       // send /api requests to your FastAPI backend
-      '/api': 'http://127.0.0.1:8000'
+      '/api': 'https://new-dashboard-backend.onrender.com'
     }
   }
 })
