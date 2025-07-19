@@ -19,21 +19,14 @@ logger = logging.getLogger(__name__)
 # Create FastAPI app (if not already created in your main.py)
 app = FastAPI(title="NDA Dashboard API", version="1.0.0")
 
-origins = [
-    "https://new-dashboard-u2l9.onrender.com",  # Your frontend URL
-    "http://localhost:5173",  # Local development
-    "http://localhost:3000",  # Alternative local port
-]
-
-# Add CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,  # Use the specific origins list, not ["*"]
-#     allow_credentials=True,
-#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-#     allow_headers=["*"],
-# )
-app.mount("/api", CORSMiddleware(app, origins))
+const express = require('express');
+const app = express();
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://new-dashboard-u2l9.onrender.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 from .auth import router as auth_router
 from .utils.budget_check import BudgetChecker
