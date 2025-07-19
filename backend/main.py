@@ -33,7 +33,7 @@ origins = [
 #     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 #     allow_headers=["*"],
 # )
-app.mount("/api", CORSMiddleware(app, origins=["https://new-dashboard-u219.onrender.com"]))
+app.mount("/api", CORSMiddleware(app, origins))
 
 from .auth import router as auth_router
 from .utils.budget_check import BudgetChecker
