@@ -1,7 +1,7 @@
 
 
 from fastapi import FastAPI, HTTPException, Depends, status, File, UploadFile, Form
-from pydantic import Basemodel
+# from pydantic import Basemodel
 from datetime import datetime
 import logging
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
