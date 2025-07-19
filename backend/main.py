@@ -28,24 +28,38 @@ logger = logging.getLogger(__name__)
 # Create FastAPI app (if not already created in your main.py)
 app = FastAPI(title="NDA Dashboard API", version="1.0.0")
 
-origins = [
-    "https://new-dashboard-u2l9.onrender.com",  # Your frontend URL
-    "http://localhost:5173",  # Local development
-    "http://localhost:3000",  # Alternative local port
-]
+const express = require("express");
+const cors = require("cors");
+const app = express();
 
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Use the specific origins list, not ["*"]
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+const allowedOrigins = [
+  "https://new-dashboard-u2l9.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:3000"
+];
 
-from .auth import router as auth_router
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Origin",
+    "Accept"
+  ],
+  maxAge: 7200
+};
 
-app.include_router(auth_router, tags=["Authentication"])
+app.use(cors(corsOptions));
+
 
 
 # Security scheme
