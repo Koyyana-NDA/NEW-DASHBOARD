@@ -8,7 +8,7 @@ export default defineConfig({
     host: '0.0.0.0', // Allow external connections
     proxy: {
       '/api': {
-        target: process.env.VITE_API_URL || 'http://127.0.0.1:8000',
+        target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       }
