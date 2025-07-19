@@ -37,7 +37,7 @@ origins = [
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://new-dashboard-u2l9.onrender.com"],  # Use the specific origins list, not ["*"]
+    allow_origins=["*"],  # Use the specific origins list, not ["*"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
