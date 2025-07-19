@@ -1,28 +1,19 @@
 
-from .utils.budget_check import BudgetChecker
+
 from fastapi import FastAPI, HTTPException, Depends, status, File, UploadFile, Form
+from pydantic import Basemodel
+from datetime import datetime
+import logging
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from typing import List, Optional, Dict, Any
-import pandas as pd
 import io
-from datetime import datetime, timedelta
-import logging
-from fastapi.responses import FileResponse
-from .utils.update_cvr import process_all_jobs_cvr, download_latest_cvr
 import os
 
 
 # Import your existing modules
-from .database import get_db
-from .auth import get_current_user, oauth2_scheme
-
-from .models import *
-from . import crud
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Create FastAPI app (if not already created in your main.py)
@@ -35,15 +26,28 @@ origins = [
 ]
 
 # Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,  # Use the specific origins list, not ["*"]
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,  # Use the specific origins list, not ["*"]
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+#     allow_headers=["*"],
+# )
+app.mount("/api", CORSMiddleware(app, origins=["https://new-dashboard-u219.onrender.com"]))
 
 from .auth import router as auth_router
+from .utils.budget_check import BudgetChecker
+from sqlalchemy.orm import Session
+from typing import List, Optional, Dict, Any
+from datetime import datetime, timedelta
+import logging
+from fastapi.responses import FileResponse
+from .utils.update_cvr import process_all_jobs_cvr, download_latest_cvr
+# import pandas as pd
+from .database import get_db
+from .auth import get_current_user, oauth2_scheme
+from .models import *
+from . import crud
 
 app.include_router(auth_router, tags=["Authentication"])
 
