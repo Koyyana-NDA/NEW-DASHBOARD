@@ -20,12 +20,21 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="NDA Dashboard API", version="1.0.0")
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://new-dashboard-u2l9.onrender.com');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
+
+app.use(cors({
+  origin: 'https://new-dashboard-u2l9.onrender.com',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
+
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+app.post('/token', (req, res) => {
+  const { username, password } = req.body;
+  // Validate credentials and return token
+  res.json({ token: 'example-token' });
 });
 
 from .auth import router as auth_router
